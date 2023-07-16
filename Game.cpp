@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
-
+#include "GameStateManager.h"
+#include "MenuState.h"
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -31,6 +32,8 @@ bool Game::Init()
         return false;
     }
     quad = new Quad();
+    GameStateManager::GetInstance()->ChangeState(new MenuState());
+
     return true;
 }
 
@@ -39,7 +42,7 @@ void Game::Run()
     shader = new Shader("default.vert","default.frag");
     while (!glfwWindowShouldClose(window))
     {
-        HandleInput();
+
         Update();
         Render();
 
@@ -53,20 +56,23 @@ void Game::Exit()
 {
     glfwDestroyWindow(window);
 }
-
-void Game::HandleInput()
+//TODO: @tarang-soni please fix keyboard events
+void Game::HandleInput()//create keyboard events as events only
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    GameStateManager::GetInstance()->GetCurrentState().HandleInput(*window);
 }
 
 void Game::Update()
 {
-
+    GameStateManager::GetInstance()->GetCurrentState().Update();
 }
 
 void Game::Render()
 {
+    GameStateManager::GetInstance()->GetCurrentState().Render();
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     shader->Bind();

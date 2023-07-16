@@ -39,18 +39,13 @@ void Quad::Update()
 
 void Quad::Render(Shader& shaderProgram)
 {
-	
-	
-	
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, _position); //rotation and scale under construction
 	GLuint transformLoc = glGetUniformLocation(shaderProgram.ID, "model");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-	
 	Bind();
 	glDrawElements(GL_TRIANGLES, 6,GL_UNSIGNED_INT,0);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
 	Unbind();
 }
 
