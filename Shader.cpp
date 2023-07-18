@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include <glad/glad.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -42,6 +43,16 @@ Shader::Shader(const char* vPath, const char* fPath)
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
     }
+}
+
+void Shader::Bind()
+{
+    glUseProgram(ID); 
+}
+
+void Shader::Unbind()
+{
+    glUseProgram(0); 
 }
 
 std::string Shader::ReadFile(const char* path)

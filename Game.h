@@ -1,8 +1,8 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Quad.h"
-#include "Shader.h"
+
+class Shader;
 class Game
 {
 public:
@@ -14,13 +14,13 @@ public:
 	GLFWwindow* GetWindow() { return window; }
 
 private:
-	void HandleInput();
+	static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void Update();
 	void Render();
 
 	GLFWwindow* window;
 	Shader* shader;
-	Quad* quad;
+
 	
 };
 

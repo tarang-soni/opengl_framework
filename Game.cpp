@@ -2,10 +2,14 @@
 #include <iostream>
 #include "GameStateManager.h"
 #include "MenuState.h"
+#include "Shader.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-Game::Game():window(0),quad(0),shader(0)
+Game::Game():window(0),shader(0)
 {
 
 }
@@ -31,9 +35,9 @@ bool Game::Init()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return false;
     }
-    quad = new Quad();
-    GameStateManager::GetInstance()->ChangeState(new MenuState());
 
+    GameStateManager::GetInstance()->ChangeState(new MenuState());
+    glfwSetKeyCallback(window, KeyboardCallback);
     return true;
 }
 
@@ -57,12 +61,13 @@ void Game::Exit()
     glfwDestroyWindow(window);
 }
 //TODO: @tarang-soni please fix keyboard events
-void Game::HandleInput()//create keyboard events as events only
+
+void Game::KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    GameStateManager::GetInstance()->GetCurrentState().HandleInput(*window);
+    GameStateManager::GetInstance()->GetCurrentState().HandleInput( window,  key,  scancode, action, mods);
 }
 
 void Game::Update()
@@ -72,7 +77,7 @@ void Game::Update()
 
 void Game::Render()
 {
-    GameStateManager::GetInstance()->GetCurrentState().Render();
+
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     shader->Bind();
@@ -86,6 +91,6 @@ void Game::Render()
     transformLoc = glGetUniformLocation(shader->ID, "projection");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(proj));
     //glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-    quad->Render(*shader);
+    GameStateManager::GetInstance()->GetCurrentState().Render(*shader);
     shader->Unbind();
 }

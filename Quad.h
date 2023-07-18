@@ -1,9 +1,8 @@
 #pragma once
-#include <glad/glad.h>
+
 #include <glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <GLFW/glfw3.h>
 class Shader;
 class Quad
 {
@@ -18,7 +17,7 @@ public:
 	//void SetScale(glm::fvec3 scale) { _scale = scale; }
 
 private:
-	GLuint VAO;
+	unsigned int VAO;
 	glm::fvec3 _position;
 
 
