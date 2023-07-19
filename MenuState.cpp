@@ -19,7 +19,7 @@ void MenuState::HandleInput(GLFWwindow* window, int key, int scancode, int actio
 		GameStateManager::GetInstance()->ChangeState(new GameState());
 }
 
-void MenuState::Update()
+void MenuState::Update(float dT)
 {
 }
 

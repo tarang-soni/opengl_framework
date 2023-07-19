@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "Utilities.h"
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 Game::Game():window(0),shader(0)
@@ -43,11 +44,16 @@ bool Game::Init()
 
 void Game::Run()
 {
+    double currentFrame = glfwGetTime(),deltaTime,lastFrame = currentFrame;
+    
     shader = new Shader("default.vert","default.frag");
     while (!glfwWindowShouldClose(window))
     {
+        currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
-        Update();
+        Update(deltaTime);
         Render();
 
         glfwSwapBuffers(window);
@@ -70,9 +76,9 @@ void Game::KeyboardCallback(GLFWwindow* window, int key, int scancode, int actio
     GameStateManager::GetInstance()->GetCurrentState().HandleInput( window,  key,  scancode, action, mods);
 }
 
-void Game::Update()
+void Game::Update(float dT)
 {
-    GameStateManager::GetInstance()->GetCurrentState().Update();
+    GameStateManager::GetInstance()->GetCurrentState().Update(dT);
 }
 
 void Game::Render()
@@ -82,9 +88,10 @@ void Game::Render()
     glClear(GL_COLOR_BUFFER_BIT);
     shader->Bind();
     glm::mat4 view = glm::mat4(1.f);
-    view = glm::translate(view, glm::vec3(0.f, 0.f, -30.f));
-
-    glm::mat4 proj = glm::ortho(-16.0f, +16.0f, -12.f, +12.f, 0.1f, 100.0f);
+    view = glm::translate(view, glm::vec3(0,0,-3.f));
+    float sWidthNew = SCREEN_WIDTH;
+    float sHeightNew = SCREEN_HEIGHT;
+    glm::mat4 proj = glm::ortho(-(sWidthNew / 2.0f), sWidthNew / 2.0f, -(sHeightNew / 2.0f), (sHeightNew / 2.0f), 0.1f, 1000.0f);
     GLuint transformLoc = glGetUniformLocation(shader->ID, "view");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(view));
 

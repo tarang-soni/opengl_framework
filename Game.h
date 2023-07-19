@@ -15,7 +15,7 @@ public:
 
 private:
 	static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	void Update();
+	void Update(float);
 	void Render();
 
 	GLFWwindow* window;

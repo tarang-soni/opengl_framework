@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseState.h"
-class Quad;
+#include <glm/glm.hpp>
+class Fruit;
+class Snake;
 class GameState :
     public BaseState
 {
@@ -9,10 +11,17 @@ class GameState :
 	void ExitState() override;
 	virtual void HandleInput(GLFWwindow* window, int key, int scancode, int action, int mods) override;
 
-	virtual void Update() override;
+	virtual void Update(float) override;
 	virtual void Render(Shader& shader) override;
 private:
+	void SpawnFruit();
 
-	Quad* quad;
+	glm::fvec3 moveDir;
+	glm::fvec3 movePosition;
+	float moveStep;
+	float moveInterval;
+	float currentInterval;
+	Snake* snake;
+	Fruit* fruit;
 };
 

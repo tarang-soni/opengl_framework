@@ -8,17 +8,20 @@ class Quad
 {
 public:
 	Quad();
-	void Update();
+
 	void Render(Shader& shaderProgram);
+	void SetPosition(glm::fvec3 pos) { _position = pos; }
+	void SetScale(glm::fvec3 scale) { _scale = scale; }
+	glm::fvec3 GetScale() { return _scale; }
+	glm::fvec3 GetPosition() { return _position; }
+
 	void Bind();
 	void Unbind();
-	void SetPosition(glm::fvec3 pos) { _position = pos; }
 	//void SetRotation(glm::fvec3 rot) { _rotation = rot; }
-	//void SetScale(glm::fvec3 scale) { _scale = scale; }
-
-private:
+protected:
 	unsigned int VAO;
 	glm::fvec3 _position;
+	glm::fvec3 _scale;
 
 
 };

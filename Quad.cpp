@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f,
@@ -12,7 +13,7 @@ unsigned int indices[]={
 	0,1,2,
 	0,2,3
 };
-Quad::Quad():_position(glm::fvec3(0))
+Quad::Quad() :_position(glm::fvec3(0)), _scale(glm::fvec3(0))
 {
 	GLuint VBO, EBO;
 	glGenBuffers(1, &VBO);
@@ -29,15 +30,11 @@ Quad::Quad():_position(glm::fvec3(0))
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 }
-
-void Quad::Update()
-{
-}
-
 void Quad::Render(Shader& shaderProgram)
 {
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, _position); //rotation and scale under construction
+	model = glm::scale(model, _scale);
 	GLuint transformLoc = glGetUniformLocation(shaderProgram.ID, "model");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
 
