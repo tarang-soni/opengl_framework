@@ -57,14 +57,16 @@ void Shader::Unbind()
 
 std::string Shader::ReadFile(const char* path)
 {
-    std::fstream file;
-    file.open(path);
-    std::stringstream ss;
-    std::string line;
-    while (std::getline(file,line))
+    std::ifstream file(path);
+
+    if (!file.is_open())
     {
-        ss << line << "\n";
+        std::cerr << "Failed to open shader: " << path << std::endl;
+        return "";
     }
-    file.close();
+
+    std::stringstream ss;
+    ss << file.rdbuf();
+
     return ss.str();
 }

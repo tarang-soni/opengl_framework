@@ -76,7 +76,7 @@ void GameState::Update(float dT)
 		currentInterval = 0;
 		movePosition += moveDir * moveStep;
 		snake->SetPosition(movePosition);
-		SpawnFruit();
+
 	}
 
 	if (movePosition.x > 400.f) {
@@ -92,7 +92,11 @@ void GameState::Update(float dT)
 		movePosition.y = 300- snake->GetScale().y / 2.f;
 	}
 	snake->Update(dT);
-
+	if (snake->isCollidingWithSnake(fruit->GetPosition(),true))
+	{
+		SpawnFruit();
+		snake->NewNode();
+	}
 }
 
 void GameState::Render(Shader& shader)
@@ -106,11 +110,31 @@ void GameState::Render(Shader& shader)
 void GameState::SpawnFruit()
 {
 
-	int randomX = rand() % SCREEN_WIDTH - SCREEN_WIDTH / 2;
-	glm::clamp(randomX, -SCREEN_WIDTH/2+(int)snake->GetScale().x/2, SCREEN_WIDTH / 2 - (int)snake->GetScale().x / 2);
-	int randomY = rand() % SCREEN_HEIGHT -SCREEN_HEIGHT/2;
-	glm::clamp(randomX, -SCREEN_HEIGHT/2+(int)snake->GetScale().y/2, SCREEN_HEIGHT / 2 - (int)snake->GetScale().y / 2);
 
-	std::cout << randomX << " " << randomY << std::endl;
-	fruit->SetPosition(glm::fvec3(randomX + snake->GetScale().x / 2, randomY+ snake->GetScale().y / 2, 0));
+	glm::vec3 pos;
+
+	do
+	{
+		int cols = SCREEN_WIDTH / (int)moveStep;
+		int rows = SCREEN_HEIGHT / (int)moveStep;
+
+		int randomX = (rand() % cols) * (int)moveStep - SCREEN_WIDTH / 2;
+		int randomY = (rand() % rows) * (int)moveStep - SCREEN_HEIGHT / 2;
+
+		randomX = glm::clamp(randomX,
+			-SCREEN_WIDTH / 2 + (int)snake->GetScale().x / 2,
+			SCREEN_WIDTH / 2 - (int)snake->GetScale().x / 2);
+
+		randomY = glm::clamp(randomY,
+			-SCREEN_HEIGHT / 2 + (int)snake->GetScale().y / 2,
+			SCREEN_HEIGHT / 2 - (int)snake->GetScale().y / 2);
+
+		pos = glm::vec3(
+			randomX + snake->GetScale().x / 2,
+			randomY + snake->GetScale().y / 2,
+			0);
+
+	} while (snake->isCollidingWithSnake(pos));
+
+	fruit->SetPosition(pos);
 }

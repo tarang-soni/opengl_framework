@@ -46,7 +46,7 @@ void Game::Run()
 {
     double currentFrame = glfwGetTime(),deltaTime,lastFrame = currentFrame;
     
-    shader = new Shader("default.vert","default.frag");
+    shader = new Shader("assets/default.vert","assets/default.frag");
     while (!glfwWindowShouldClose(window))
     {
         currentFrame = glfwGetTime();
