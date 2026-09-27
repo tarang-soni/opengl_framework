@@ -1,14 +1,14 @@
 #pragma once
-#include <glad/glad.h>
+
 #include <string>
 class Shader
 {
 public:
 	Shader(const char* fPath,const char* vPath);
-	GLuint ID;
+	unsigned int ID;
 
-	void Bind() { glUseProgram(ID); }
-	void Unbind() { glUseProgram(0); }
+	void Bind();
+	void Unbind();
 	
 private:
 	std::string ReadFile(const char* path);

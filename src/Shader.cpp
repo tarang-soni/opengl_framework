@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include <glad/glad.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -44,16 +45,28 @@ Shader::Shader(const char* vPath, const char* fPath)
     }
 }
 
+void Shader::Bind()
+{
+    glUseProgram(ID); 
+}
+
+void Shader::Unbind()
+{
+    glUseProgram(0); 
+}
+
 std::string Shader::ReadFile(const char* path)
 {
-    std::fstream file;
-    file.open(path);
-    std::stringstream ss;
-    std::string line;
-    while (std::getline(file,line))
+    std::ifstream file(path);
+
+    if (!file.is_open())
     {
-        ss << line << "\n";
+        std::cerr << "Failed to open shader: " << path << std::endl;
+        return "";
     }
-    file.close();
+
+    std::stringstream ss;
+    ss << file.rdbuf();
+
     return ss.str();
 }
